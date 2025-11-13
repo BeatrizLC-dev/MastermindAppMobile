@@ -11,7 +11,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  name: 'MastermindAppMobile',
+  base: '/MastermindAppMobile/',
   plugins: [
     VueRouter(),
     Vue({
