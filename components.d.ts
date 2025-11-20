@@ -13,7 +13,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     CodeSecret: typeof import('./src/components/game-logic/CodeSecret.vue')['default']
-    Controls: typeof import('./src/components/ui-elements/Controls.vue')['default']
+    Controls: typeof import('./src/components/Controls.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
     Game: typeof import('./src/components/Game.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
@@ -21,8 +21,10 @@ declare module 'vue' {
     Home: typeof import('./src/components/Home.vue')['default']
     LigneEssaie: typeof import('./src/components/game-logic/LigneEssaie.vue')['default']
     Pion: typeof import('./src/components/game-logic/Pion.vue')['default']
+    Regle: typeof import('./src/components/RulesModal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SelecteurDifficulte: typeof import('./src/components/ui-elements/SelecteurDifficulte.vue')['default']
+    RulesModal: typeof import('./src/components/RulesModal.vue')['default']
+    SelecteurDifficulte: typeof import('./src/components/SelecteurDifficulte.vue')['default']
   }
 }

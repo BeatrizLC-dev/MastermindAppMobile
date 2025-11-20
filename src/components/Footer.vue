@@ -1,6 +1,6 @@
 <template>
   <footer class="footer">
-    <p>© 2024 MastermindAppMobile. All rights reserved.</p>
+    <p>© 2025 MastermindAppMobile. All rights reserved.</p>
   </footer>
 </template>
 
