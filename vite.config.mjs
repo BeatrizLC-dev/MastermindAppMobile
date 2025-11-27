@@ -9,9 +9,14 @@ import VueRouter from 'unplugin-vue-router/vite'
 import { defineConfig } from 'vite'
 import { fileURLToPath, URL } from 'node:url'
 
+// LIGNE AJOUTÉE : Détermine si la variable d'environnement MOBILE_BUILD est vraie
+const isMobileBuild = process.env.MOBILE_BUILD === 'true';
+
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/MastermindAppMobile/',
+  // MODIFIÉ : Chemin de base conditionnel. Utilise './' pour Capacitor, et '/MastermindAppMobile/' pour le web.
+  base: isMobileBuild ? './' : '/MastermindAppMobile/',
+  
   plugins: [
     VueRouter(),
     Vue({

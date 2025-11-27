@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">MastermindAppMobile</string>
+    <string name="title_activity_main">MastermindAppMobile</string>
+    <string name="package_name">com.beatrizlcdev.mastermindappmobile</string>
+    <string name="custom_url_scheme">com.beatrizlcdev.mastermindappmobile</string>
+</resources>

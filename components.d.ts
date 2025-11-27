@@ -11,17 +11,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./src/components/AppFooter.vue')['default']
-    CodeSecret: typeof import('./src/components/game-logic/CodeSecret.vue')['default']
-    Controls: typeof import('./src/components/Controls.vue')['default']
     Footer: typeof import('./src/components/Footer.vue')['default']
     Game: typeof import('./src/components/Game.vue')['default']
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     Historique: typeof import('./src/components/game-logic/Historique.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
     LigneEssaie: typeof import('./src/components/game-logic/LigneEssaie.vue')['default']
-    Pion: typeof import('./src/components/game-logic/Pion.vue')['default']
-    Regle: typeof import('./src/components/RulesModal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     RulesModal: typeof import('./src/components/RulesModal.vue')['default']
