@@ -1,8 +1,8 @@
 <script setup>
-import { ref } from 'vue'; // Importez 'ref' pour gérer l'état
+import { ref } from 'vue';
 import Footer from './Footer.vue';
 import Game from './Game.vue';
-import RulesModal from './RulesModal.vue'; // Importez le nouveau composant de règles
+import RulesModal from './RulesModal.vue';
 
 // État pour contrôler la visibilité de la modale des règles
 const showRules = ref(false); 
@@ -11,12 +11,12 @@ const showRules = ref(false);
 <template>
   <div class="content">
     
-    <button @click="showRules = true" class="rules-btn">
-      ❓ Afficher les Règles
-    </button>
-    
-    <h1>Mastermind</h1>
-    
+    <div class="header-content">
+        <h1>Mastermind</h1>
+        <button @click="showRules = true" class="rules-btn">
+          Règle du jeu
+        </button>
+    </div>
     <Game />
     
     <RulesModal v-if="showRules" @close="showRules = false" /> 
@@ -32,25 +32,40 @@ const showRules = ref(false);
   min-height: 100vh;
   margin: 0; 
   padding: 0;
+  align-items: center;
 }
 
-/* Positionnement du bouton */
+.header-content {
+    width: 95%; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 0 10px;
+    flex-wrap: wrap; 
+}
+
+.header-content h1 {
+    font-size: 2em;
+    margin: 0;
+    flex-shrink: 1; 
+}
+
 .rules-btn {
-  position: absolute; /* Place le bouton dans le coin */
-  top: 10px;
-  right: 10px;
-  padding: 8px 15px;
-  background-color: #f8f9fa;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  z-index: 10; /* Assurez-vous qu'il est au-dessus du reste du contenu */
+    padding: 8px 15px;
+    background-color: #f0f0f0; 
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 10;
+    margin-top: 5px; 
+    margin-bottom: 5px; 
+    
+    flex-shrink: 0; 
 }
 
-/* L'élément qui doit prendre l'espace restant (dans ce cas, le contenu du jeu) */
-.content > h1,
 .content > :deep(.game) {
-  flex-grow: 1;
+  flex-grow: 1; 
 }
 </style>

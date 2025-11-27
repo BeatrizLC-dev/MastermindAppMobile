@@ -1,6 +1,16 @@
+<script>
+export default {
+    data() {
+        return {
+            currentYear: new Date().getFullYear()
+        };
+    }
+}
+</script>
+
 <template>
   <footer class="footer">
-    <p>© 2025 MastermindAppMobile. All rights reserved.</p>
+    <p>© {{ currentYear }} MastermindAppMobile. All rights reserved.</p>
   </footer>
 </template>
 

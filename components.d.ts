@@ -14,6 +14,7 @@ declare module 'vue' {
     Footer: typeof import('./src/components/Footer.vue')['default']
     Game: typeof import('./src/components/Game.vue')['default']
     Historique: typeof import('./src/components/game-logic/Historique.vue')['default']
+    HistoriqueLigne: typeof import('./src/components/game-logic/HistoriqueLigne.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
     LigneEssaie: typeof import('./src/components/game-logic/LigneEssaie.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

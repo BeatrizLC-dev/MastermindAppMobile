@@ -21,9 +21,12 @@ const emit = defineEmits(['close']);
         <hr>
         
         <h3>Comment Jouer</h3>
+        <p>Vous devez sélectionner une couleur dans la palette, puis cliquer sur l'un des emplacements de la ligne d'essai pour placer ce pion. </p>
         <ul>
-          <li><strong>Proposer une Combinaison :</strong> Utilisez la palette de couleurs et faites un <strong>glisser-déposer</strong> les pions vers la ligne d'essai active.</li>
-          <li><strong>Valider :</strong> Cliquez sur le bouton de validation (✔) pour soumettre votre essai.</li>
+          <li><strong>Sélectionner une Couleur :</strong> Cliquez sur le pion de couleur souhaité dans la <strong>palette de gauche</strong> (ou la barre en haut sur mobile). Le pion sélectionné sera mis en surbrillance.</li>
+          <li><strong>Placer le Pion :</strong> Cliquez sur l'un des <strong>trous gris vides</strong> de la ligne d'essai active pour y déposer le pion sélectionné.</li>
+          <li><strong>Modifier :</strong> Vous pouvez placer plusieurs fois la même couleur et changer le pion sélectionné à tout moment.</li>
+          <li><strong>Valider :</strong> Une fois la ligne d'essai complète, cliquez sur le bouton <strong>"Valider combinaison"</strong> pour soumettre votre essai.</li>
         </ul>
         
         <hr>
@@ -58,17 +61,16 @@ const emit = defineEmits(['close']);
 
 <style scoped>
 .modal-overlay {
-  /* Fixe la modale sur tout l'écran, au-dessus de tout */
   position: fixed; 
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7); /* Arrière-plan sombre et transparent */
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Assurez-vous qu'il est au-dessus du bouton et du jeu */
+  z-index: 1000;
 }
 
 .modal-content {
@@ -77,7 +79,7 @@ const emit = defineEmits(['close']);
   border-radius: 8px;
   max-width: 90%;
   max-height: 90%;
-  overflow-y: auto; /* Permet de défiler si le contenu est trop grand */
+  overflow-y: auto;
   position: relative;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   text-align: left;
@@ -94,7 +96,6 @@ const emit = defineEmits(['close']);
   color: #555;
 }
 
-/* Styles pour le contenu des règles */
 .rules-body {
   margin-top: 15px;
 }
