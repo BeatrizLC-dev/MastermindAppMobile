@@ -1,4 +1,5 @@
 <script setup>
+// Importation des composants nécessaires
 import { ref } from 'vue';
 import Footer from './Footer.vue';
 import Game from './Game.vue';
@@ -10,17 +11,17 @@ const showRules = ref(false);
 
 <template>
   <div class="content">
-    
+
     <div class="header-content">
-        <h1>Mastermind</h1>
-        <button @click="showRules = true" class="rules-btn">
-          Règle du jeu
-        </button>
+      <h1>Mastermind</h1>
+      <button @click="showRules = true" class="rules-btn">
+        Règle du jeu
+      </button>
     </div>
     <Game />
-    
-    <RulesModal v-if="showRules" @close="showRules = false" /> 
-    
+
+    <RulesModal v-if="showRules" @close="showRules = false" />
+
     <Footer />
   </div>
 </template>
@@ -30,42 +31,55 @@ const showRules = ref(false);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  margin: 0; 
+  margin: 0;
   padding: 0;
   align-items: center;
+  background-color: #F8F0E3; 
 }
 
 .header-content {
-    width: 95%; 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 15px;
-    padding: 0 10px;
-    flex-wrap: wrap; 
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px; 
+  padding: 0 15px;
+  flex-wrap: wrap;
 }
 
 .header-content h1 {
-    font-size: 2em;
-    margin: 0;
-    flex-shrink: 1; 
+  font-size: 2.5em; 
+  margin: 0;
+  flex-shrink: 1;
+  color: #333;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
 
 .rules-btn {
-    padding: 8px 15px;
-    background-color: #f0f0f0; 
-    border: 1px solid #aaa;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    z-index: 10;
-    margin-top: 5px; 
-    margin-bottom: 5px; 
-    
-    flex-shrink: 0; 
+  padding: 10px 20px;
+  background-color: #6B8E23; 
+  color: white;
+  border: none;
+  border-radius: 8px; 
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  z-index: 10;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  transition: all 0.3s ease; 
+  box-shadow: 0 4px 10px rgba(107, 142, 35, 0.4);
 }
 
-.content > :deep(.game) {
-  flex-grow: 1; 
+.rules-btn:hover {
+    background-color: #5A761F; 
+    box-shadow: 0 4px 12px rgba(107, 142, 35, 0.6);
+}
+
+.content> :deep(.game) {
+  flex-grow: 1;
+  width: 100%; 
+  padding: 0 15px; 
 }
 </style>

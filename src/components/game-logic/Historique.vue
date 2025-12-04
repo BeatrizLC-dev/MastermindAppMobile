@@ -33,8 +33,8 @@ export default {
 <style scoped>
 .historique-container {
     display: flex;
-    flex-direction: column-reverse; /* Affiche la tentative la plus récente en bas */
-    max-height: 400px; /* Limiter la hauteur du plateau */
+    flex-direction: column-reverse;
+    max-height: 400px;
     overflow-y: auto;
     padding-bottom: 10px;
 }

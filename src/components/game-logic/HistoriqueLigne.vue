@@ -37,26 +37,17 @@ export default {
 </script>
 
 <template>
-  <div class="historique-row">
-    <div class="guess-display">
-      <div 
-          v-for="(colorName, index) in guess" 
-          :key="index" 
-          class="guess-peg"
-      >
-          <img :src="getJetonPath(colorName)" :alt="`Jeton ${colorName}`" class="jeton-icon-peg" />
-      </div>
+    <div class="historique-row">
+        <div class="guess-display">
+            <div v-for="(colorName, index) in guess" :key="index" class="guess-peg">
+                <img :src="getJetonPath(colorName)" :alt="`Jeton ${colorName}`" class="jeton-icon-peg" />
+            </div>
+        </div>
+
+        <div class="feedback-display">
+            <div v-for="(peg, index) in feedbackPegs" :key="index" class="feedback-peg" :class="`peg-${peg}`"></div>
+        </div>
     </div>
-    
-    <div class="feedback-display">
-        <div 
-            v-for="(peg, index) in feedbackPegs" 
-            :key="index" 
-            class="feedback-peg"
-            :class="`peg-${peg}`"
-        ></div>
-    </div>
-  </div>
 </template>
 
 <style scoped>
@@ -65,7 +56,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 5px 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ccc; 
 }
 
 .guess-display {
@@ -77,9 +68,9 @@ export default {
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    border: 1px solid #ccc;
+    border: 1px solid #A08D6D; 
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .jeton-icon-peg {
@@ -90,34 +81,38 @@ export default {
 
 .feedback-display {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr); 
+    width: 55px;
+    height: 40px; 
     gap: 4px;
-    width: 40px; /* Espace pour les 4 petits pions */
-    height: 40px;
     padding: 2px;
+    background-color: #F8F0E3; 
+    border-radius: 4px;
+    flex-shrink: 0; 
 }
 
 .feedback-peg {
-    width: 15px;
+    width: 15px; 
     height: 15px;
     border-radius: 50%;
-    border: 1px solid #aaa;
-    background-color: #ddd;
+    border: 1px solid black;
+    background-color: #E0D4C5;
 }
 
 .feedback-peg.peg-black {
     background-color: black;
     border-color: black;
+    box-shadow: none;
 }
 
 .feedback-peg.peg-white {
     background-color: white;
-    border-color: #666;
+    border-color: #333;
+    box-shadow: none;
 }
 
 .feedback-peg.peg-empty {
-    /* Fond gris clair par défaut */
-    border: 1px dashed #ccc;
-    background-color: #f5f5f5;
+    border: 1px dashed #A08D6D;
+    background-color: #D4C1A5;
 }
 </style>

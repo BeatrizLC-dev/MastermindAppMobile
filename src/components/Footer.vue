@@ -1,10 +1,10 @@
 <script>
 export default {
-    data() {
-        return {
-            currentYear: new Date().getFullYear()
-        };
-    }
+  data() {
+    return {
+      currentYear: new Date().getFullYear()
+    };
+  }
 }
 </script>
 
@@ -17,13 +17,16 @@ export default {
 <style scoped>
 .footer {
   width: 100%;
-  color: #333;
+  background-color: #F8F0E3;
+  color: #555;
+  padding: 20px 0;
   margin-top: auto;
   text-align: center;
+  border-top: 1px solid #ccc; 
 }
 
 .footer p {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 </style>
