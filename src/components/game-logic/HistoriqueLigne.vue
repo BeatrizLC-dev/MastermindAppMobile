@@ -1,32 +1,42 @@
 <script>
 export default {
     name: 'HistoriqueLigne',
+    // Propriétés reçues du parent (Historique.vue)
     props: {
+        // Le tableau de couleurs de la tentative soumise
         guess: { // Le tableau de couleurs de la tentative
             type: Array,
             required: true
         },
+        // L'objet d'indices {black: N, white: M}
         feedback: { // L'objet {black: N, white: M}
             type: Object,
             required: true
         },
+        // Fonction pour obtenir le chemin de l'icône du jeton
         getJetonPath: { // La fonction passée de Game.vue
             type: Function,
             required: true
         }
     },
+    // Propriétés calculées
     computed: {
+        /**
+         * Génère un tableau ordonné de pions d'indice (noir, blanc, vide)
+         * pour faciliter l'affichage dans la grille de feedback.
+         * @returns {('black'|'white'|'empty')[]} Tableau des types de pions d'indice.
+         */
         feedbackPegs() {
             const pegs = [];
-            // Ajouter les pions noirs (bonne couleur, bonne place)
+            // 1. Ajouter les pions noirs (bonne couleur, bonne place)
             for (let i = 0; i < this.feedback.black; i++) {
                 pegs.push('black');
             }
-            // Ajouter les pions blancs (bonne couleur, mauvaise place)
+            // 2. Ajouter les pions blancs (bonne couleur, mauvaise place)
             for (let i = 0; i < this.feedback.white; i++) {
                 pegs.push('white');
             }
-            // Remplir avec des pions gris/vides si nécessaire
+            // 3. Remplir avec des pions gris/vides jusqu'à la longueur du code
             while (pegs.length < this.guess.length) {
                 pegs.push('empty');
             }
@@ -56,7 +66,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 5px 0;
-    border-bottom: 1px solid #ccc; 
+    border-bottom: 1px solid #ccc;
 }
 
 .guess-display {
@@ -68,7 +78,7 @@ export default {
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    border: 1px solid #A08D6D; 
+    border: 1px solid #A08D6D;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
@@ -81,18 +91,18 @@ export default {
 
 .feedback-display {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); 
+    grid-template-columns: repeat(3, 1fr);
     width: 55px;
-    height: 40px; 
+    height: 40px;
     gap: 4px;
     padding: 2px;
-    background-color: #F8F0E3; 
+    background-color: #F8F0E3;
     border-radius: 4px;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
 
 .feedback-peg {
-    width: 15px; 
+    width: 15px;
     height: 15px;
     border-radius: 50%;
     border: 1px solid black;

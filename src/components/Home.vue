@@ -6,6 +6,7 @@ import Game from './Game.vue';
 import RulesModal from './RulesModal.vue';
 
 // État pour contrôler la visibilité de la modale des règles
+// ref(false) indique que la modale est initialement cachée.
 const showRules = ref(false); 
 </script>
 

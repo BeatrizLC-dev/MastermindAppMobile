@@ -1,4 +1,5 @@
 <script>
+// Mappage des jetons (copie locale pour référence)
 const COLOR_MAP = {
     'Gris': './jeton-Gris.ico',
     'Bleu': './jeton-Bleu.ico',
@@ -13,23 +14,27 @@ const COLOR_MAP = {
 };
 
 // DÉFINITION DES COULEURS DISPONIBLES PAR NIVEAU
+// Détermine quelles couleurs sont utilisables pour chaque niveau de difficulté.
 const DIFFICULTY_COLORS = {
-    'facile': Object.keys(COLOR_MAP).slice(0, 4),
-    'normal': Object.keys(COLOR_MAP).slice(0, 5),
-    'moyen': Object.keys(COLOR_MAP).slice(0, 7),
-    'difficile': Object.keys(COLOR_MAP).slice(0, 9),
-    'expert': Object.keys(COLOR_MAP).slice(0, 10),
+    'facile': Object.keys(COLOR_MAP).slice(0, 4), // 4 couleurs
+    'normal': Object.keys(COLOR_MAP).slice(0, 5), // 5 couleurs
+    'moyen': Object.keys(COLOR_MAP).slice(0, 7), // 7 couleurs
+    'difficile': Object.keys(COLOR_MAP).slice(0, 9), // 9 couleurs
+    'expert': Object.keys(COLOR_MAP).slice(0, 10), // 10 couleurs
 };
 
 export default {
     name: 'SelecteurDifficulte',
 
+    // Propriétés reçues du parent (Game.vue)
     props: {
+        // 'mode' détermine l'affichage : 'desktop' (colonne latérale) ou 'mobile' (barre en haut)
         mode: {
             type: String,
             required: true,
             validator: (value) => ['desktop', 'mobile'].includes(value)
         },
+        // Difficulté actuellement sélectionnée
         currentDifficulty: {
             type: String,
             default: 'normal',
@@ -38,6 +43,7 @@ export default {
 
     data() {
         return {
+            // Liste des niveaux de difficulté affichables
             difficultyLevels: [
                 { label: 'Facile', key: 'facile' },
                 { label: 'Normal', key: 'normal' },
@@ -45,25 +51,47 @@ export default {
                 { label: 'Difficile', key: 'difficile' },
                 { label: 'Expert', key: 'expert' },
             ],
+            // État local de la difficulté sélectionnée (synchronisé avec la prop au montage)
             selectedDifficulty: this.currentDifficulty,
         };
     },
 
+    // Propriétés calculées
     computed: {
+        /**
+         * Retourne le tableau des noms de couleurs disponibles pour la difficulté sélectionnée localement.
+         * @returns {string[]} Liste des noms de jetons.
+         */
         availableJetonNames() {
             const key = this.selectedDifficulty.toLowerCase();
             return DIFFICULTY_COLORS[key] || DIFFICULTY_COLORS['normal'];
         }
     },
 
+    // Méthodes
     methods: {
+        /**
+         * Gère la sélection d'un niveau de difficulté.
+         * Met à jour l'état local et émet un événement au parent (`Game.vue`) pour mettre à jour l'état global du jeu.
+         * @param {string} level - La clé de difficulté ('facile', 'normal', etc.).
+         */
         selectLevel(level) {
             this.selectedDifficulty = level;
             this.$emit('difficulty-selected', level);
         },
+        /**
+         * Gère la sélection d'une couleur (utilisé uniquement en mode 'mobile').
+         * Émet la couleur sélectionnée au parent (`Game.vue`) pour qu'elle puisse être placée sur le plateau.
+         * @param {string} colorName - Le nom de la couleur sélectionnée.
+         */
         selectColor(colorName) {
             this.$emit('color-selected', colorName);
         },
+        /**
+         * Fournit le chemin d'accès à l'icône du jeton pour une couleur donnée.
+         * @param {string} colorName - Le nom de la couleur.
+         * @returns {string} Le chemin d'accès au fichier icône.
+         */
         getJetonPath(colorName) {
             return COLOR_MAP[colorName];
         }

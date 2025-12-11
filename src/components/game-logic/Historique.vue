@@ -4,12 +4,15 @@ import HistoriqueLigne from './HistoriqueLigne.vue';
 export default {
     name: 'Historique',
     components: { HistoriqueLigne },
+    // Propriétés reçues du parent (Game.vue)
     props: {
+        // Le tableau d'historique des tentatives (chaque élément contient guess et feedback)
         tentatives: { // L'array d'historique de Game.vue
             type: Array,
             required: true,
             default: () => []
         },
+        // Fonction pour obtenir le chemin de l'icône du jeton
         getJetonPath: { // La fonction passée de Game.vue
             type: Function,
             required: true

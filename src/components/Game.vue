@@ -4,25 +4,32 @@ import Historique from './game-logic/Historique.vue';
 import LigneEssaie from './game-logic/LigneEssaie.vue';
 
 // --- FONCTIONS D'OBFUSCATION (Double Encryptage Léger) ---
+
+// Clé de stockage utilisée pour sauvegarder le code secret dans le localStorage
 const STORAGE_KEY = 'mastermind_secret_code';
 
+/**
+ * Chiffre le tableau de couleurs du code secret pour un stockage léger et non évident
+ * dans le localStorage. Cela n'est pas une sécurité, juste une obfuscation.
+ * @param {string[]} codeArray - Le tableau de couleurs représentant le code secret.
+ * @returns {string} Le code secret obscurci (string, base64, puis inversé).
+ */
 function encryptCode(codeArray) {
-    const codeString = codeArray.join('|');
-    const base64 = btoa(codeString);
-    const reversed = base64.split('').reverse().join('');
+    const codeString = codeArray.join('|'); // Joint les couleurs avec un séparateur
+    const base64 = btoa(codeString); // Encode en Base64
+    const reversed = base64.split('').reverse().join(''); // Inverse la chaîne pour la "seconde" couche d'obfuscation
     return reversed;
 }
 
-// ------------------------------------------------------------
 
-
-// Mappage des jetons (CYAN et GRIS remplacent BLANC et NOIR)
+// Mappage des jetons
+// Définit le chemin d'accès pour l'icône de chaque couleur de jeton disponible.
 const COLOR_MAP = {
-    'Gris': './jeton-Gris.ico', // REMPLACE LE NOIR
+    'Gris': './jeton-Gris.ico',
     'Bleu': './jeton-Bleu.ico',
     'Brun': './jeton-Brun.ico',
     'Jaune': './jeton-Jaune.ico',
-    'Cyan': './jeton-Cyan.ico', // REMPLACE LE BLANC
+    'Cyan': './jeton-Cyan.ico',
     'Orange': './jeton-Orange.ico',
     'Rose': './jeton-Rose.ico',
     'Rouge': './jeton-Rouge.ico',
@@ -30,15 +37,17 @@ const COLOR_MAP = {
     'Violet': './jeton-Violet.ico',
 };
 
+// Tableau contenant tous les noms de couleurs disponibles.
 const ALL_JETON_NAMES = Object.keys(COLOR_MAP);
 
-// DÉFINITION DES NOUVELLES RÈGLES DE DIFFICULTÉ
+// DÉFINITION DES RÈGLES DE DIFFICULTÉ
+// Paramètres de jeu pour chaque niveau de difficulté.
 const DIFFICULTY_SETTINGS = {
-    'facile': { colorsCount: 4, attempts: 10, codeLength: 4 },
-    'normal': { colorsCount: 5, attempts: 9, codeLength: 5 },
-    'moyen': { colorsCount: 7, attempts: 8, codeLength: 5 },
-    'difficile': { colorsCount: 9, attempts: 7, codeLength: 5 },
-    'expert': { colorsCount: 10, attempts: 6, codeLength: 5 },
+    'facile': { colorsCount: 4, attempts: 10, codeLength: 4 }, // 4 couleurs disponibles, 10 essais, code de 4 pions
+    'normal': { colorsCount: 5, attempts: 9, codeLength: 5 }, // 5 couleurs disponibles, 9 essais, code de 5 pions
+    'moyen': { colorsCount: 7, attempts: 8, codeLength: 5 }, // 7 couleurs disponibles, 8 essais, code de 5 pions
+    'difficile': { colorsCount: 9, attempts: 7, codeLength: 5 }, // 9 couleurs disponibles, 7 essais, code de 5 pions
+    'expert': { colorsCount: 10, attempts: 6, codeLength: 5 }, // 10 couleurs disponibles, 6 essais, code de 5 pions
 };
 
 export default {
@@ -50,46 +59,73 @@ export default {
         LigneEssaie,
     },
 
+    // Données réactives du composant
     data() {
         return {
-            currentDifficulty: 'normal',
-            selectedColorName: null,
+            currentDifficulty: 'normal', // Niveau de difficulté sélectionné
+            selectedColorName: null, // Nom de la couleur sélectionnée par l'utilisateur pour placer un pion
 
+            // Objet contenant l'état actuel de la partie
             gameData: {
-                secretCode: [],
-                currentGuess: Array(4).fill(null),
-                attempts: [],
-                currentRow: 0,
+                secretCode: [], // Le code secret généré par l'ordinateur
+                currentGuess: Array(4).fill(null), // Le tableau représentant la ligne d'essai actuelle de l'utilisateur
+                attempts: [], // L'historique des tentatives (guess et feedback)
+                currentRow: 0, // Le numéro de la ligne d'essai actuelle (compteur de tentatives)
             },
         };
     },
 
+    // Propriétés calculées
     computed: {
+        /**
+         * Retourne les noms des couleurs de jetons disponibles pour la difficulté actuelle.
+         * @returns {string[]} Liste des noms de couleurs.
+         */
         availableColors() {
             const settings = DIFFICULTY_SETTINGS[this.currentDifficulty] || DIFFICULTY_SETTINGS['normal'];
+            // Utilise les 'colorsCount' pour prendre les N premières couleurs du tableau ALL_JETON_NAMES
             return ALL_JETON_NAMES.slice(0, settings.colorsCount);
         },
+        /**
+         * Retourne le nombre maximum de tentatives autorisées pour la difficulté actuelle.
+         * @returns {number} Nombre maximum d'essais.
+         */
         maxAttempts() {
             const settings = DIFFICULTY_SETTINGS[this.currentDifficulty] || DIFFICULTY_SETTINGS['normal'];
             return settings.attempts;
         },
+        /**
+         * Retourne la longueur du code (nombre de pions par ligne) pour la difficulté actuelle.
+         * @returns {number} Longueur du code.
+         */
         codeLength() {
             const settings = DIFFICULTY_SETTINGS[this.currentDifficulty] || DIFFICULTY_SETTINGS['normal'];
             return settings.codeLength;
         }
     },
 
+    // Observateur de propriétés (Watchers)
     watch: {
+        /**
+         * Déclenche un redémarrage du jeu (resetGame) lorsque le niveau de difficulté change.
+         */
         currentDifficulty() {
             this.resetGame();
         }
     },
 
+    // Cycle de vie : exécuté après le montage du composant
     mounted() {
+        // Initialise une nouvelle partie au chargement
         this.resetGame();
     },
 
+    // Méthodes
     methods: {
+        /**
+         * Génère un nouveau code secret aléatoire basé sur les paramètres de difficulté actuels.
+         * Le code est ensuite stocké de manière obscurcie dans le localStorage.
+         */
         generateSecretCode() {
             const colors = this.availableColors;
             const code = [];
@@ -100,88 +136,142 @@ export default {
 
             this.gameData.secretCode = code;
 
+            // Obfusque et stocke dans le localStorage (principalement à des fins de débogage/vérification côté client)
             const encrypted = encryptCode(code);
             localStorage.setItem(STORAGE_KEY, encrypted);
         },
 
+        /**
+         * Réinitialise l'état du jeu pour commencer une nouvelle partie.
+         * Cela inclut la réinitialisation du tableau d'essais, de l'historique, du compteur de lignes
+         * et la génération d'un nouveau code secret.
+         */
         resetGame() {
-            this.gameData.currentGuess = Array(this.codeLength).fill(null);
-            this.gameData.attempts = [];
-            this.gameData.currentRow = 0;
-            this.selectedColorName = null;
-            this.generateSecretCode();
+            this.gameData.currentGuess = Array(this.codeLength).fill(null); // Vide la ligne d'essai actuelle
+            this.gameData.attempts = []; // Vide l'historique
+            this.gameData.currentRow = 0; // Réinitialise le compteur de tentatives
+            this.selectedColorName = null; // Désélectionne la couleur
+            this.generateSecretCode(); // Génère un nouveau code secret
         },
 
+        /**
+         * Met à jour la couleur actuellement sélectionnée par l'utilisateur.
+         * @param {string} colorName - Le nom de la couleur sélectionnée.
+         */
         selectColor(colorName) {
             this.selectedColorName = colorName;
         },
 
+        /**
+         * Place le pion de la couleur sélectionnée à l'index spécifié dans la ligne d'essai actuelle.
+         * @param {number} pegIndex - L'index (position) où placer le pion.
+         */
         selectPeg(pegIndex) {
+            // Vérifie qu'une couleur est sélectionnée et qu'il reste des tentatives
             if (this.selectedColorName && this.gameData.currentRow < this.maxAttempts) {
+                // Crée une copie du tableau d'essai pour le modifier de manière immuable
                 const newGuess = [...this.gameData.currentGuess];
                 newGuess[pegIndex] = this.selectedColorName;
                 this.gameData.currentGuess = newGuess;
             }
         },
 
+        /**
+         * Valide la combinaison d'essai actuelle.
+         * Vérifie si la ligne est complète, calcule les indices (feedback), met à jour l'historique,
+         * gère la fin de partie (victoire ou défaite) et passe à la ligne suivante.
+         */
         validateCombination() {
+            // Vérifie si tous les emplacements ont été remplis
             if (this.gameData.currentGuess.includes(null)) {
                 alert("Veuillez remplir toute la ligne.");
                 return;
             }
 
+            // Calcule les indices (pions noirs et blancs)
             const feedback = this.checkGuess(this.gameData.currentGuess, this.gameData.secretCode);
+            
+            // Ajoute la tentative et les indices à l'historique
             this.gameData.attempts.push({
                 guess: [...this.gameData.currentGuess],
                 feedback: feedback,
             });
 
-            // LOGIQUE DE REDÉMARRAGE AUTOMATIQUE
+            // --- LOGIQUE DE FIN DE PARTIE ---
+            
+            // Condition de Victoire : Si le nombre de pions noirs est égal à la longueur du code
             if (feedback.black === this.codeLength) {
                 alert("Bravo ! Vous avez trouvé le code ! Une nouvelle partie va commencer.");
+                // Redémarre le jeu après un court délai
                 setTimeout(() => {
                     this.resetGame();
                 }, 500);
                 return;
-            } else if (this.gameData.currentRow >= this.maxAttempts - 1) {
+            } 
+            // Condition de Défaite : Si le joueur a utilisé toutes ses tentatives
+            else if (this.gameData.currentRow >= this.maxAttempts - 1) {
                 alert(`Partie terminée ! Le code secret était : ${this.gameData.secretCode.join(', ')}.\nUne nouvelle partie va commencer.`);
+                // Redémarre le jeu après un court délai
                 setTimeout(() => {
                     this.resetGame();
                 }, 500);
                 return;
             }
 
-            this.gameData.currentRow++;
-            this.gameData.currentGuess = Array(this.codeLength).fill(null);
-            this.selectedColorName = null;
+            // Si le jeu continue :
+            this.gameData.currentRow++; // Incrémente le compteur de tentatives
+            this.gameData.currentGuess = Array(this.codeLength).fill(null); // Réinitialise la ligne d'essai pour la prochaine tentative
+            this.selectedColorName = null; // Désélectionne la couleur
         },
 
+        /**
+         * Calcule les indices (pions noirs et blancs) pour une tentative donnée.
+         * Le calcul suit les règles standard du Mastermind.
+         * @param {string[]} guess - La combinaison d'essai de l'utilisateur.
+         * @param {string[]} secret - Le code secret.
+         * @returns {{black: number, white: number}} L'objet contenant le nombre de pions noirs et blancs.
+         */
         checkGuess(guess, secret) {
             let blackPegs = 0;
             let whitePegs = 0;
+            // Crée des copies pour pouvoir modifier les tableaux sans altérer l'état d'origine
             const secretCopy = [...secret];
             const guessCopy = [...guess];
 
+            // Première passe : Compte les pions noirs (bonne couleur, bonne place)
             for (let i = 0; i < this.codeLength; i++) {
                 if (guessCopy[i] === secretCopy[i] && guessCopy[i] !== null) {
                     blackPegs++;
+                    // Marque les pions trouvés comme '__USED__' pour ne pas les compter à nouveau
                     secretCopy[i] = guessCopy[i] = '__USED__';
                 }
             }
+            
+            // Deuxième passe : Compte les pions blancs (bonne couleur, mauvaise place)
             for (let i = 0; i < this.codeLength; i++) {
-                if (guessCopy[i] !== '__USED__') {
+                if (guessCopy[i] !== '__USED__') { // Traite seulement les pions non encore utilisés (ni noirs, ni null)
+                    // Recherche la couleur du pion d'essai dans le code secret (qui contient encore les pions non noirs)
                     const secretIndex = secretCopy.findIndex(color => color === guessCopy[i]);
                     if (secretIndex !== -1) {
                         whitePegs++;
+                        // Marque le pion du code secret comme utilisé pour éviter les doublons
                         secretCopy[secretIndex] = '__USED__';
                     }
                 }
             }
+            
             return { black: blackPegs, white: whitePegs };
         },
 
+        /**
+         * Fournit le chemin d'accès à l'icône du jeton pour un nom de couleur donné.
+         * Utilisé pour l'affichage de tous les jetons dans l'application.
+         * @param {string} colorName - Le nom de la couleur du jeton (e.g., 'Bleu').
+         * @returns {string} Le chemin d'accès au fichier icône.
+         */
         getJetonPath(colorName) {
-            return COLOR_MAP[colorName] || COLOR_MAP['Blanc'];
+            // Utilise 'Blanc' par défaut si la couleur n'est pas trouvée (fallback)
+            return COLOR_MAP[colorName] || COLOR_MAP['Blanc']; 
         }
     }
 }

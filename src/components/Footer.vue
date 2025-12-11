@@ -1,6 +1,8 @@
 <script>
 export default {
+  // Données
   data() {
+    // Obtenir l'année en cours pour l'affichage dans le footer
     return {
       currentYear: new Date().getFullYear()
     };
