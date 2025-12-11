@@ -36,7 +36,7 @@ export default {
 <style scoped>
 .historique-container {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column; 
     max-height: 400px;
     overflow-y: auto;
     padding-bottom: 10px;
